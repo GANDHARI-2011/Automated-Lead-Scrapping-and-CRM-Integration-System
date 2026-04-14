@@ -1,0 +1,468 @@
+{
+  "name": "Lead scraping agent",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://r.jina.ai/https://https://www.trulia.com/CA/Los_Angeles/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2352,
+        -528
+      ],
+      "id": "f7a02948-73ac-48d5-a424-7639eafa4296",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "F5VZXUug4hmJbaMC",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.data }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"RealEstateListing\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"results\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"address\": {\n            \"type\": \"string\",\n            \"description\": \"Full address of the property.\"\n          },\n          \"price\": {\n            \"type\": \"integer\",\n            \"description\": \"The sale price of the property.\"\n          },\n          \"bedrooms\": {\n            \"type\": \"integer\",\n            \"description\": \"Number of bedrooms.\"\n          },\n          \"bathrooms\": {\n            \"type\": \"number\",\n            \"description\": \"Number of bathrooms.\"\n          },\n          \"size\": {\n            \"type\": \"integer\",\n            \"description\": \"Square footage of the property.\"\n          },\n          \"url\": {\n            \"type\": \"string\",\n            \"description\": \"The listing URL.\"\n          }\n        }\n      }\n    }\n  }\n}",
+        "options": {
+          "systemPromptTemplate": "Paste this into the System Prompt Template box under Options. This gives the AI the \"brain\" to find the data.\n​You are an expert data extractor. Analyze the given data and extract detailed information about recently sold properties or active listings. For each property found, provide the address, price, bedrooms, bathrooms, size, and URL. Ensure all extracted items are placed inside the \"results\" array."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        -2128,
+        -528
+      ],
+      "id": "096d0cd2-9763-4361-94a8-c0b83ff8e30e",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -2128,
+        -288
+      ],
+      "id": "97fcba8b-1d91-455d-bee9-8504cd91b421",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "e7pxu99YS2EFlXD8",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1680,
+        -528
+      ],
+      "id": "9cff8838-37a5-4a1e-9e56-c9ce359f287e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "16_yKDGAmhDW6WOpqHR9dXD2I5Rh_w0xB7E9gz_dMCt8",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16_yKDGAmhDW6WOpqHR9dXD2I5Rh_w0xB7E9gz_dMCt8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1625353631,
+          "mode": "list",
+          "cachedResultName": "Sheet3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16_yKDGAmhDW6WOpqHR9dXD2I5Rh_w0xB7E9gz_dMCt8/edit#gid=1625353631"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "bedrooms",
+              "displayName": "bedrooms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "bathrooms",
+              "displayName": "bathrooms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "realtor ",
+              "displayName": "realtor ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price_per_sqft",
+              "displayName": "price_per_sqft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "size",
+              "displayName": "size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1392,
+        -528
+      ],
+      "id": "9ee8c53f-1396-4476-9fd2-de47fc6db321",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "g6YqGtUo1Sjfa9s9",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "Objective:\nThe AI agent is tasked with analyzing the real estate market to provide actionable insights and recommendations specifically for real estate agents. Using the provided dataset, the agent will extract key information about properties, identify trends, and offer strategies to help agents close deals, attract clients, and stay competitive in the market.\n\nInput Data Structure:\nThe dataset consists of the following columns:\n\nAddress : The physical location of the property.\nPrice : The selling price of the property (in dollars).\nBedrooms : The number of bedrooms in the property.\nBathrooms : The number of bathrooms in the property.\nSize : The total square footage of the property.\nSale Date : The date when the property was sold.\nURL : A link to the property listing online.\nRealtor : The name or company of the real estate agent handling the sale.\nType : The type of property (e.g., single-family home, condo, townhouse).\nPrice Per Sqft : The cost per square foot of the property.\nStatus : The current status of the property (e.g., Sold, Active, Pending).\n\nInstructions for the AI Agent:\nStep 1: Data Extraction and Cleaning\nParse the input data to ensure all fields are correctly identified and formatted. Handle missing values appropriately by either estimating them (if possible) or excluding incomplete records. Convert dates into a standardized format for easier analysis.\n\nStep 2: Descriptive Statistics\nGenerate summary statistics for the dataset, focusing on metrics relevant to real estate agents:\n- Average and median prices for different property types.\n- Distribution of sales by neighborhood or area.\n- Most common property configurations (e.g., 3-bedroom/2-bathroom homes)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1872,
+        -352
+      ],
+      "id": "a7fea305-590a-4c0a-936a-178de0a082da",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1872,
+        -96
+      ],
+      "id": "1bdb1c5b-faeb-45c1-96c2-b42444109326",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AeLKmxjA0xhtFGB3",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "Based on the input you get, provide a summary in a structured format. Do not say things like: \"here's the summary\" instead just say \"Here is the Real Estate Market Analysis:\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1488,
+        -352
+      ],
+      "id": "63fe1ecc-79f7-4cc9-8189-f7d7a712dc5a",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1472,
+        -80
+      ],
+      "id": "e8760d79-c333-45ca-bbec-19bef47e9114",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EiRRYOMtMksQWSi1",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "itsmeanu090@gmail.com",
+        "subject": "real estate market analysis",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        -352
+      ],
+      "id": "48b064f7-ed2a-4cde-a2f3-32bb0fd7216d",
+      "name": "Send a message",
+      "webhookId": "9f78df34-f8f3-4f42-8694-e56c4a7f8b1c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0TvnjghZa7x8nsB6",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2592,
+        -528
+      ],
+      "id": "b2184daa-5696-4718-80e4-8952ade6a609",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "27f26393-e193-4c4a-8682-89fd311b25f3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9ca410d05582dcc359f52f2b5918e93c1a762fd2aee6012e93ab3c3e92940d25"
+  },
+  "id": "vbIgYkx2C0uaNiqX",
+  "tags": []
+}
