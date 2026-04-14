@@ -1,0 +1,53 @@
+https://pothula.app.n8n.cloud/workflow/JpjrFQfomzIEJvc7
+work flow process
+Trigger (Manual/Webhook/Cron)
+        ↓
+Data Input / Initialization
+        ↓
+File Creation Step
+        ↓
+Workflow Processing Logic
+        ↓
+Data Transformation / Formatting
+        ↓
+Output Handling (Store / Send / Save)
+json code for Automatically collecting leas from online sources
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RealEstateListing",
+  "type": "object",
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Full address of the property."
+          },
+          "price": {
+            "type": "integer",
+            "description": "The sale price of the property."
+          },
+          "bedrooms": {
+            "type": "integer",
+            "description": "Number of bedrooms."
+          },
+          "bathrooms": {
+            "type": "number",
+            "description": "Number of bathrooms."
+          },
+          "size": {
+            "type": "integer",
+            "description": "Square footage of the property."
+          },
+          "url": {
+            "type": "string",
+            "description": "The listing URL."
+          }
+        }
+      }
+    }
+  }
+}
